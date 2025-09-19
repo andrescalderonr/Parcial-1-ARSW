@@ -11,8 +11,6 @@ public class PiDigits {
     private static int DigitsPerSum = 8;
     private static double Epsilon = 1e-17;
 
-    private Object lock = new Object();
-
 
 
     /**
@@ -21,7 +19,21 @@ public class PiDigits {
      * @param count The number of digits to return
      * @return An array containing the hexadecimal digits.
      */
-    public static byte[] getDigits(int start, int count ) {
+    public static byte[] getDigits(int start, int count,int n ) throws InterruptedException {
+
+        for(int i =0; i< n;i++){
+            int residual = count%n;
+            int size = count;
+            if(residual != 0){
+                size += 1;
+            }
+            int end = start+size;
+            start = end;
+
+            Thread thread= new ThreadClassPiDigits(start,end);
+            thread.join();
+        }
+
         if (start < 0) {
             throw new RuntimeException("Invalid Interval");
         }
@@ -113,8 +125,6 @@ public class PiDigits {
         return result;
     }
 
-    private void pauseTrheads(){
 
-    }
 
 }
